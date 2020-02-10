@@ -7,13 +7,16 @@
     <ul v-else>
       <li v-for="food in foods" :key="food.id">
         {{ food.title }} - {{ food.price }} - {{ food.inventory }}
-        <button @click="addFoodToCart(food)">Add to cart</button>
+        <button :disabled="!foodIsInStock(food)" @click="addFoodToCart(food)">
+          Add to cart
+        </button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex';
 export default {
   name: 'FoodList',
   props: {
@@ -27,20 +30,25 @@ export default {
   },
 
   computed: {
-    foods() {
-      return this.$store.getters.availableFoods;
-    }
+    ...mapState({
+      foods: state => state.foods.items
+    }),
+
+    ...mapGetters({
+      foodIsInStock: 'foodIsInStock'
+    })
   },
 
   methods: {
-    addFoodToCart(food) {
-      this.$store.dispatch('addFoodToCart', food);
-    }
+    ...mapActions({
+      fetchFoods: 'fetchFoods',
+      addFoodToCart: 'addFoodToCart'
+    })
   },
 
   created() {
     this.loading = true;
-    this.$store.dispatch('fetchFoods').then(() => (this.loading = false));
+    this.fetchFoods().then(() => (this.loading = false));
   }
 };
 </script>

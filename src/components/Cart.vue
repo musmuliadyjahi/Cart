@@ -7,12 +7,13 @@
     </ul>
 
     <p>Total : {{ total }}</p>
-    <button @click="$store.dispatch('checkout')">Checkout</button>
-    <p v-if="$store.state.checkoutStatus">{{ $store.state.checkoutStatus }}</p>
+    <button @click="checkout">Checkout</button>
+    <p v-if="checkoutStatus">{{ checkoutStatus }}</p>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Cart',
   props: {
@@ -20,13 +21,18 @@ export default {
   },
 
   computed: {
-    foods() {
-      return this.$store.getters.cartFoods;
-    },
+    ...mapGetters({
+      foods: 'cartFoods',
+      total: 'cartTotal'
+    }),
 
-    total() {
-      return this.$store.getters.cartTotal;
-    }
+    ...mapState({
+      checkoutStatus: state => state.cart.checkoutStatus
+    })
+  },
+
+  methods: {
+    ...mapActions(['checkout'])
   }
 };
 </script>
