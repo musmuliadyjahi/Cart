@@ -4,9 +4,19 @@ const _foods = [
   { id: 3, title: 'Coto Makassar', price: 20000, inventory: 5 }
 ];
 
+const _clients = [
+  { id: 1, name: 'Musmuliadu Jahi' },
+  { id: 2, name: 'Akbar' },
+  { id: 3, name: 'Afif' }
+];
+
 export default {
   getFoods(cb) {
     setTimeout(() => cb(_foods), 100);
+  },
+
+  getClients(cb) {
+    setTimeout(() => cb(_clients), 100);
   },
 
   buyFoods(foods, cb, errorCb) {
